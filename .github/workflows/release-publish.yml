@@ -1,4 +1,4 @@
-name: toughradius release
+name: logsight release
 
 on:
   push:
@@ -22,12 +22,12 @@ jobs:
       - name: Build for ARM64
         run: |
           mkdir -p ./release
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -ldflags  '-s -w -extldflags "-static"' -o ./release/toughradius_arm64 main.go
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -ldflags  '-s -w -extldflags "-static"' -o ./release/logsight_arm64 main.go
 
       # Build for AMD64
       - name: Build for AMD64
         run: |
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags  '-s -w -extldflags "-static"' -o ./release/toughradius_amd64 main.go
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags  '-s -w -extldflags "-static"' -o ./release/logsight_amd64 main.go
 
       - name: Create Release
         id: create_release
@@ -47,8 +47,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/toughradius_arm64
-          asset_name: toughradius_arm64
+          asset_path: ./release/logsight_arm64
+          asset_name: logsight_arm64
           asset_content_type: application/octet-stream
 
       # Upload AMD64 Asset
@@ -58,8 +58,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/toughradius_amd64
-          asset_name: toughradius_amd64
+          asset_path: ./release/logsight_amd64
+          asset_name: logsight_amd64
           asset_content_type: application/octet-stream
 
             # define job to build and publish docker image
@@ -98,8 +98,8 @@ jobs:
           context: ./
           # Note: tags has to be all lower-case
           tags: |
-            talkincode/toughradius:${{ github.ref_name }} 
-            ghcr.io/talkincode/toughradius:${{ github.ref_name }}
+            talkincode/logsight:${{ github.ref_name }} 
+            ghcr.io/talkincode/logsight:${{ github.ref_name }}
           # build on feature branches, push only on main branch
           push: ${{ startsWith(github.ref, 'refs/tags/') }}
 
