@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{template "header"}}
+    <title>LogSight | Syslog</title>
+</head>
+<body>
+<script>
+
+    webix.ready(function () {
+        let queryid = webix.uid()
+        let tableid = webix.uid()
+        let reloadData = wxui.reloadDataFunc(tableid, "/admin/syslog/query", queryid)
+        let showLog = function (id, node) {
+            let ditem = $$(tableid).getItem(id)
+            webix.ui({
+                view: "popup", height: 360, width: 520, scroll: "auto", body: {
+                    view: "template", css: "log-template", template: ditem.message
+                }
+            }).show(node)
+        }
+        webix.ui({
+            css: "main-panel",
+            padding: 7,
+            rows: [
+                wxui.getPageToolbar({
+                    title: "系统日志",
+                    icon: "mdi mdi-document",
+                    elements: [],
+                }),
+                wxui.getTableQueryCustomForm(queryid, [
+                    {
+                        cols: [
+                            {
+                                view: "datepicker",
+                                timepicker: true,
+                                name: "starttime",
+                                label: gtr("Time From"),
+                                labelWidth: 80,
+                                width:240,
+                                stringResult: true,
+                                format: "%Y-%m-%d %H:%i",
+                                css: "nborder-input",
+                                value: webix.Date.add(new Date(), -8, "hour"),
+                                editable: true
+                            },
+                            {
+                                view: "datepicker",
+                                timepicker: true,
+                                name: "endtime",
+                                label: gtr("to"),
+                                labelWidth: 20,
+                                stringResult: true,
+                                format: "%Y-%m-%d %H:%i",
+                                css: "nborder-input",
+                                value: new Date(),
+                                editable: true
+                            },
+                            {
+                                view: "text", name: "hostname", placeholder: "主机"
+                            },
+                            {
+                                view: "search", name: "keyword", placeholder: "关键字"
+                            },
+                            {
+                                view: "button",
+                                label: "查询",
+                                css: "webix_transparent",
+                                type: "icon",
+                                icon: "mdi mdi-search-web",
+                                borderless: true,
+                                width: 70,
+                                click: function () {
+                                    reloadData()
+                                }
+                            }, {}
+                        ]
+                    }
+                ]),
+                wxui.getDatatable({
+                    tableid: tableid,
+                    url: '/admin/syslog/query',
+                    columns: [
+                        {
+                            id: "type", header: [""], headermenu: false, template: function (obj) {
+                                if (obj.severity === 7) {
+                                    return "<i class='mdi mdi-file-document' style='color: blue'></i>"
+                                }
+
+                                if (obj.severity === 3) {
+                                    return "<i class='mdi mdi-file-document' style='color: red'></i>"
+                                }
+
+                                if (obj.severity === 4) {
+                                    return "<i class='mdi mdi-file-document' style='color: orange'></i>"
+                                }
+
+                                return "<i class='mdi mdi-file-document' style='color: gray'></i>"
+
+                            }, adjust: true
+                        },
+                        {id: "timestamp", header: ["时间"], width: 160,},
+                        {id: "hostname", header: ["主机"], adjust: true},
+                        {id: "appname", header: ["应用模块"], adjust: true},
+                        {
+                            id: "message",
+                            header: ["消息"],
+                            template: "<a class='do_detail' href='javascript:void(0)'><i class='mdi mdi-eye' style='color: blue'></i></a> #message#",
+                            fillspace: true
+                        }
+                    ],
+                    rightSplit: 0,
+                    pager: true,
+                    on: {
+                        onItemDblClick: function (id, e, node) {
+                            showLog(id, node)
+                        }
+                    },
+                    onClick: {
+                        "do_detail": function (e, id, node) {
+                            showLog(id, node)
+                        }
+                    }
+                }),
+                wxui.getTableFooterBar({
+                    tableid: tableid,
+                    actions: [
+                        wxui.getIconButton(tr("global", "导出"), 90, "download", false, function () {
+                            webix.toCSV($$(tableid));
+                        }),
+                    ],
+                    callback: reloadData
+                }),
+            ]
+        })
+    })
+</script>
+</body>
+</html>

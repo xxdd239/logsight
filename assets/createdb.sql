@@ -1,0 +1,3 @@
+CREATE USER logsight WITH PASSWORD 'logsight';
+CREATE DATABASE logsight WITH OWNER logsight;
+GRANT ALL PRIVILEGES ON DATABASE logsight TO logsight;

@@ -1,0 +1,33 @@
+system:
+  appid: LogSight
+  location: Asia/Shanghai
+  workdir: /tmp/logsight
+  debug: true
+web:
+  host: 0.0.0.0
+  port: 8889
+  tls_port: 8884
+  secret: 9b6de5cc-0731-1203-llll-0f568ac9da37
+database:
+  type: postgres
+  host: 172.21.66.121
+  port: 5433
+  name: logsight
+  user: logsight
+  passwd: logsight
+  max_conn: 100
+  idle_conn: 10
+  debug: false
+syslogd:
+  host: 0.0.0.0
+  port: 8514
+  debug: false
+logger:
+  mode: development
+  console_enable: true
+  loki_enable: false
+  file_enable: true
+  queue_size: 10000
+  filename: /tmp/logsight/logsight.log
+  metrics_storage: /tmp/logsight/data/metrics
+  metrics_history: 168

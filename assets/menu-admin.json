@@ -1,0 +1,12 @@
+[
+  {"id": "100", "value": "系统状态", "icon": "mdi mdi-monitor-dashboard", "url": "/admin/sysstatus"},
+  {"id": "110", "value": "系统日志", "icon": "mdi mdi-text-search", "url": "/admin/syslog"},
+  {"id": "120", "value": "RADIUS 日志", "icon": "mdi mdi-database-search", "url": "/admin/radius/accounting"},
+  {
+    "id": "180", "value": "系统管理", "icon": "mdi mdi-cogs", "data": [
+      {"id": "1801", "value": "系统设置", "icon": "mdi mdi-chevron-right", "url": "/admin/settings"},
+      {"id": "1802", "value": "操作员", "icon": "mdi mdi-chevron-right", "url": "/admin/opr"},
+      {"id": "1807", "value": "操作日志", "icon": "mdi mdi-chevron-right", "url": "/admin/oplog"}
+    ]
+  }
+]
