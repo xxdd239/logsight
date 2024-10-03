@@ -1,9 +1,11 @@
 name: logsight release
 
 on:
+  # run it on push to the default repository branch
   push:
-    tags:
-      - ''
+    branches: [main]
+  # run it during pull request
+  pull_request:
 
 jobs:
   build:
