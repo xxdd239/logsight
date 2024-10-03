@@ -1,11 +1,10 @@
 name: logsight release
 
 on:
-  # run it on push to the default repository branch
+  # 仅在推送标签时运行
   push:
-    branches: [main]
-  # run it during pull request
-  pull_request:
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -31,12 +30,13 @@ jobs:
         run: |
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags  '-s -w -extldflags "-static"' -o ./release/logsight_amd64 main.go
 
+      # Create Release
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          release_name: ${{ github.ref_name }}
           draft: false
           prerelease: false
 
@@ -57,6 +57,3 @@ jobs:
           asset_path: ./release/logsight_amd64
           asset_name: logsight_amd64
           asset_content_type: application/octet-stream
-
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
