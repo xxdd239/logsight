@@ -4,7 +4,7 @@ on:
   # 仅在推送标签时运行
   push:
     tags:
-      - 'v*.*.*'
+      - '*'
 
 jobs:
   build:
